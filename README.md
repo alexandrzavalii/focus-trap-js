@@ -1,2 +1,3 @@
 # focus-trap-js
-This is a vanilla 1kb javascript package to trap the focus for the specified container.
+
+Trap focus inside specified HTML element. Vanilla JS with size <0.5kb. No dependencies.
