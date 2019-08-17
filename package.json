@@ -1,10 +1,14 @@
 {
   "name": "focus-trap-js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This is a vanilla 1kb javascript package to trap the focus for the specified container.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexandrzavalii/focus-trap-js.git"
   },
   "keywords": [
     "trap",
