@@ -1,0 +1,16 @@
+{
+  "name": "focus-trap-js",
+  "version": "1.0.0",
+  "description": "This is a vanilla 1kb javascript package to trap the focus for the specified container.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "trap",
+    "vanilla",
+    "javascript"
+  ],
+  "author": "alexandrzavalii",
+  "license": "ISC"
+}
