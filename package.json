@@ -2,19 +2,44 @@
   "name": "focus-trap-js",
   "version": "1.0.1",
   "description": "This is a vanilla 1kb javascript package to trap the focus for the specified container.",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint '**/*.js'",
+    "lint:fix": "prettier-eslint '**/*.js' --write",
+    "clean": "del-cli dist && make-dir dist",
+    "build-dev": "npm run clean && browserify src/index.js -s focusTrapJs > dist/focus-trap-js.js",
+    "minify": "uglifyjs --compress --mangle -- dist/focus-trap-js.js > dist/focus-trap-js.min.js",
+    "precommit": "pretty-quick --staged"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/alexandrzavalii/focus-trap-js.git"
+    "url": "git+https://github.com/alexandrzavalii/focus-trap-js.git"
   },
   "keywords": [
     "trap",
     "vanilla",
     "javascript"
   ],
-  "author": "alexandrzavalii",
-  "license": "ISC"
+  "author": "Alexandr Zavalii",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alexandrzavalii/focus-trap-js/issues"
+  },
+  "homepage": "https://github.com/alexandrzavalii/focus-trap-js#readme",
+  "devDependencies": {
+    "browserify": "16.5.0",
+    "del-cli": "2.0.0",
+    "eslint": "6.1.0",
+    "eslint-config-prettier": "6.0.0",
+    "eslint-config-standard": "13.0.1",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-node": "9.1.0",
+    "eslint-plugin-promise": "4.2.1",
+    "eslint-plugin-standard": "4.0.0",
+    "make-dir-cli": "2.0.0",
+    "prettier": "1.18.2",
+    "prettier-eslint": "9.0.0",
+    "prettier-eslint-cli": "5.0.0",
+    "uglify-js": "3.6.0"
+  }
 }
