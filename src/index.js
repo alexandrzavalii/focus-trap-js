@@ -21,42 +21,12 @@ function getAllTabbingElements (parentElem) {
   return filterNegativeTabIndex
 }
 
-function findNextTabbableElement (parentElem, element) {
-  var findNode = null
-  var findNextTabbableNode = null
-  if (!parentElem || !element) {
-    return null
-  }
-  function recursiveSearch (rootNode, elm) {
-    for (var i = 0; i < rootNode.childNodes.length; i++) {
-      var child = rootNode.childNodes[i]
-      if (
-        findNode &&
-        child.nodeType === 1 &&
-        child.getAttribute('tabIndex') === 0
-      ) {
-        findNextTabbableNode = child
-        return findNextTabbableNode
-      }
-
-      if (child === elm) {
-        findNode = child
-      }
-      recursiveSearch(child, element)
-    }
-    return null
-  }
-
-  recursiveSearch(parentElem, element)
-  return findNextTabbableNode
-}
-
 function tabTrappingKey (event, parentElem) {
   // check if current element is inside parent element
   if (!parentElem.contains(event.target)) {
     return
   }
-
+  // check if current event keyCode is tab
   if (event.keyCode !== 9) return
 
   var allTabbingElements = getAllTabbingElements(parentElem)
@@ -64,28 +34,11 @@ function tabTrappingKey (event, parentElem) {
   var lastFocusableElement = allTabbingElements[allTabbingElements.length - 1]
 
   if (event.shiftKey && event.target === firstFocusableElement) {
-    if (lastFocusableElement) {
-      lastFocusableElement.focus()
-      event.preventDefault()
-      return
-    }
+    lastFocusableElement.focus()
+    event.preventDefault()
   } else if (!event.shiftKey && event.target === lastFocusableElement) {
-    if (firstFocusableElement) {
-      firstFocusableElement.focus()
-      event.preventDefault()
-      return
-    }
-  }
-
-  if (!event.shiftKey && event.target.tabIndex !== 0) {
-    // find next tabIndexable element instead
-    var nextTabableElement =
-      findNextTabbableElement(parentElem, event.target) || firstFocusableElement
-
-    if (nextTabableElement) {
-      nextTabableElement.focus()
-      event.preventDefault()
-    }
+    firstFocusableElement.focus()
+    event.preventDefault()
   }
 }
 
