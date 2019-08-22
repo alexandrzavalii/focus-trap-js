@@ -22,12 +22,13 @@ function getAllTabbingElements (parentElem) {
 }
 
 function tabTrappingKey (event, parentElem) {
-  // check if current element is inside parent element
-  if (!parentElem.contains(event.target)) {
-    return
-  }
   // check if current event keyCode is tab
   if (event.keyCode !== 9) return
+
+  // check if current element is inside parent element
+  if (!parentElem || !parentElem.contains(event.target)) {
+    return
+  }
 
   var allTabbingElements = getAllTabbingElements(parentElem)
   var firstFocusableElement = allTabbingElements[0]
