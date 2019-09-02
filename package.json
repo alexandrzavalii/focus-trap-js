@@ -1,8 +1,9 @@
 {
   "name": "focus-trap-js",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Trap focus inside specified HTML element. Vanilla JS with size <0.5kb. No dependencies. Easy to use with React, Angular or Raw Javascript",
   "main": "src/index.js",
+  "types": "src/index.d.ts",
   "scripts": {
     "lint": "eslint '**/*.js'",
     "lint:fix": "prettier-eslint '**/*.js' --write",

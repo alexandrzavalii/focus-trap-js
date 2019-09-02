@@ -25,8 +25,14 @@ function tabTrappingKey (event, parentElem) {
   // check if current event keyCode is tab
   if (event.keyCode !== 9) return
 
+  if (!parentElem) {
+    if (process && process.env.NODE_ENV === 'development') {
+      console.warn('focus-trap-js: parent element is not defined')
+    }
+    return
+  }
   // check if current element is inside parent element
-  if (!parentElem || !parentElem.contains(event.target)) {
+  if (!parentElem.contains(event.target)) {
     return
   }
 
