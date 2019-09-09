@@ -10,12 +10,23 @@ var candidateSelectors = [
   '[contenteditable]:not([contenteditable="false"])'
 ]
 
+function isHidden (node) {
+  // offsetParent being null will allow detecting cases where an element is invisible or inside an invisible element,
+  // as long as the element does not use position: fixed. For them, their visibility has to be checked directly as well.
+  return node.offsetParent === null || getComputedStyle(node).visibility === 'hidden'
+}
+
 function getAllTabbingElements (parentElem) {
   var tabbableNodes = parentElem.querySelectorAll(candidateSelectors.join(','))
   var filterNegativeTabIndex = []
   for (var i = 0; i < tabbableNodes.length; i++) {
-    if (getTabindex(tabbableNodes[i]) > -1) {
-      filterNegativeTabIndex.push(tabbableNodes[i])
+    var node = tabbableNodes[i]
+    if (
+      getTabindex(node) > -1 &&
+      !node.disabled &&
+      !isHidden(node)
+    ) {
+      filterNegativeTabIndex.push(node)
     }
   }
   return filterNegativeTabIndex
@@ -52,7 +63,7 @@ function tabTrappingKey (event, parentElem) {
 function getTabindex (node) {
   var tabindexAttr = parseInt(node.getAttribute('tabindex'), 10)
   if (!isNaN(tabindexAttr)) return tabindexAttr
-  // Browsers do not return `tabIndex` correctly for contentEditable nodes;
+  // Browsers do not return tabIndex correctly for contentEditable nodes;
   // so if they don't have a tabindex attribute specifically set, assume it's 0.
   if (isContentEditable(node)) return 0
   return node.tabIndex
