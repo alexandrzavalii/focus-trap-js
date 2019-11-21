@@ -26,7 +26,7 @@ document.addEventListener("keydown", event => {
 });
 ```
 
-The method `focusTrap` accepts two parameters, the `event` and `HTML element` in which you want to trap your focus.
+The method `focusTrap` accepts two parameters, the `event` and `HTML element` container in which you want to trap your focus.
 
 ## Usage in React
 
