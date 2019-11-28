@@ -34,7 +34,7 @@ function getAllTabbingElements (parentElem) {
 
 function tabTrappingKey (event, parentElem) {
   // check if current event keyCode is tab
-  if (event.keyCode !== 9) return
+  if (event.key !== 'Tab') return
 
   if (!parentElem) {
     if (process && process.env.NODE_ENV === 'development') {
