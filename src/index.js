@@ -18,33 +18,33 @@ function isHidden (node) {
 
 function getAllTabbingElements (parentElem) {
   var tabbableNodes = parentElem.querySelectorAll(candidateSelectors.join(','))
-  var filterNegativeTabIndex = []
+  var onlyTabbable = []
   for (var i = 0; i < tabbableNodes.length; i++) {
     var node = tabbableNodes[i]
     if (
-      getTabindex(node) > -1 &&
       !node.disabled &&
+      getTabindex(node) > -1 &&
       !isHidden(node)
     ) {
-      filterNegativeTabIndex.push(node)
+      onlyTabbable.push(node)
     }
   }
-  return filterNegativeTabIndex
+  return onlyTabbable
 }
 
 function tabTrappingKey (event, parentElem) {
   // check if current event keyCode is tab
-  if (event.key !== 'Tab') return
+  if (!event || event.key !== 'Tab') return
 
-  if (!parentElem) {
+  if (!parentElem || !parentElem.contains) {
     if (process && process.env.NODE_ENV === 'development') {
       console.warn('focus-trap-js: parent element is not defined')
     }
-    return
+    return false
   }
-  // check if current element is inside parent element
+
   if (!parentElem.contains(event.target)) {
-    return
+    return false
   }
 
   var allTabbingElements = getAllTabbingElements(parentElem)
@@ -54,23 +54,28 @@ function tabTrappingKey (event, parentElem) {
   if (event.shiftKey && event.target === firstFocusableElement) {
     lastFocusableElement.focus()
     event.preventDefault()
+    return true
   } else if (!event.shiftKey && event.target === lastFocusableElement) {
     firstFocusableElement.focus()
     event.preventDefault()
+    return true
   }
+  return false
 }
 
 function getTabindex (node) {
   var tabindexAttr = parseInt(node.getAttribute('tabindex'), 10)
+
   if (!isNaN(tabindexAttr)) return tabindexAttr
   // Browsers do not return tabIndex correctly for contentEditable nodes;
   // so if they don't have a tabindex attribute specifically set, assume it's 0.
+
   if (isContentEditable(node)) return 0
   return node.tabIndex
 }
 
 function isContentEditable (node) {
-  return node.contentEditable === 'true'
+  return node.getAttribute('contentEditable')
 }
 
 module.exports = tabTrappingKey
