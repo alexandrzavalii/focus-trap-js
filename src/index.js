@@ -16,6 +16,26 @@ function isHidden (node) {
   return node.offsetParent === null || getComputedStyle(node).visibility === 'hidden'
 }
 
+function getCheckedRadio (nodes, form) {
+  for (var i = 0; i < nodes.length; i++) {
+    if (nodes[i].checked && nodes[i].form === form) {
+      return nodes[i]
+    }
+  }
+}
+
+function isNotRadioOrTabbableRadio (node) {
+  if (node.tagName !== 'INPUT' || node.type !== 'radio') {
+    return true
+  }
+  var radioScope = node.form || node.ownerDocument
+  var radioSet = radioScope.querySelectorAll(
+    'input[type="radio"][name="' + node.name + '"]'
+  )
+  var checked = getCheckedRadio(radioSet, node.form)
+  return checked === node || (checked === undefined && radioSet[0] === node)
+}
+
 function getAllTabbingElements (parentElem) {
   var tabbableNodes = parentElem.querySelectorAll(candidateSelectors.join(','))
   var onlyTabbable = []
@@ -24,7 +44,8 @@ function getAllTabbingElements (parentElem) {
     if (
       !node.disabled &&
       getTabindex(node) > -1 &&
-      !isHidden(node)
+      !isHidden(node) &&
+      isNotRadioOrTabbableRadio(node)
     ) {
       onlyTabbable.push(node)
     }
@@ -78,4 +99,5 @@ function isContentEditable (node) {
   return node.getAttribute('contentEditable')
 }
 
+tabTrappingKey.isNotRadioOrTabbableRadio = isNotRadioOrTabbableRadio
 module.exports = tabTrappingKey

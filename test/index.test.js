@@ -130,3 +130,38 @@ describe('Test elements with custom tabIndex', () => {
     expect(event.preventDefault).toBeCalledTimes(1)
   })
 })
+
+describe('Test isRadio', () => {
+  test('a DIV', () => {
+    const node = {
+      tagName: 'DIV'
+    }
+    expect(tabTrappingKey.isNotRadioOrTabbableRadio(node)).toBeTruthy()
+  })
+  test('Input', () => {
+    const node = {
+      tagName: 'INPUT'
+    }
+    expect(tabTrappingKey.isNotRadioOrTabbableRadio(node)).toBeTruthy()
+  })
+  test('non tabbable radio ', () => {
+    const node = document.createElement('input')
+    node.type = 'radio'
+    expect(tabTrappingKey.isNotRadioOrTabbableRadio(node)).toBeFalsy()
+  })
+
+  test('tabbable radio ', () => {
+    const ownerDocument = {
+      querySelectorAll: jest.fn(() => [node]),
+    }
+    const node = {
+      type: 'radio',
+      tagName: 'INPUT',
+      checked: true,
+      ownerDocument
+    }
+
+    expect(tabTrappingKey.isNotRadioOrTabbableRadio(node)).toBeTruthy()
+    expect(ownerDocument.querySelectorAll).toBeCalledWith('input[type="radio"][name="' + node.name + '"]')
+  })
+})
