@@ -25,7 +25,7 @@ function getCheckedRadio (nodes, form) {
 }
 
 function isNotRadioOrTabbableRadio (node) {
-  if (node.tagName !== 'INPUT' || node.type !== 'radio') {
+  if (node.tagName !== 'INPUT' || node.type !== 'radio' || !node.name) {
     return true
   }
   var radioScope = node.form || node.ownerDocument
@@ -37,15 +37,19 @@ function isNotRadioOrTabbableRadio (node) {
 }
 
 function getAllTabbingElements (parentElem) {
+  var currentActiveElement = document.activeElement
   var tabbableNodes = parentElem.querySelectorAll(candidateSelectors.join(','))
   var onlyTabbable = []
   for (var i = 0; i < tabbableNodes.length; i++) {
     var node = tabbableNodes[i]
     if (
-      !node.disabled &&
-      getTabindex(node) > -1 &&
-      !isHidden(node) &&
-      isNotRadioOrTabbableRadio(node)
+      currentActiveElement === node ||
+      (
+        !node.disabled &&
+        getTabindex(node) > -1 &&
+        !isHidden(node) &&
+        isNotRadioOrTabbableRadio(node)
+      )
     ) {
       onlyTabbable.push(node)
     }
