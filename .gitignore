@@ -5,3 +5,6 @@ dist
 lib
 .DS_Store
 .vscode
+jest-cache
+.idea
+coverage
