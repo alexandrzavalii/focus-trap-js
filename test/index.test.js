@@ -147,16 +147,17 @@ describe('Test isRadio', () => {
   test('non tabbable radio ', () => {
     const node = document.createElement('input')
     node.type = 'radio'
-    expect(tabTrappingKey.isNotRadioOrTabbableRadio(node)).toBeFalsy()
+    expect(tabTrappingKey.isNotRadioOrTabbableRadio(node)).toBeTruthy()
   })
 
   test('tabbable radio ', () => {
     const ownerDocument = {
-      querySelectorAll: jest.fn(() => [node]),
+      querySelectorAll: jest.fn(() => [node])
     }
     const node = {
       type: 'radio',
       tagName: 'INPUT',
+      name: 'name',
       checked: true,
       ownerDocument
     }
