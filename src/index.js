@@ -73,7 +73,7 @@ function getAllTabbingElements (parentElem) {
   return onlyTabbable
 }
 
-function tabTrappingKey (event, parentElem) {
+function tabTrappingKey (event, parentElem, onlyTabbable) {
   // check if current event keyCode is tab
   if (!event || event.key !== 'Tab') return
 
@@ -88,7 +88,7 @@ function tabTrappingKey (event, parentElem) {
     return false
   }
 
-  var allTabbingElements = getAllTabbingElements(parentElem)
+  var allTabbingElements = onlyTabbable || getAllTabbingElements(parentElem)
   var firstFocusableElement = allTabbingElements[0]
   var lastFocusableElement = allTabbingElements[allTabbingElements.length - 1]
 
