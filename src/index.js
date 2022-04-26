@@ -4,6 +4,7 @@ var candidateSelectors = [
   'textarea',
   'a[href]',
   'button',
+  'iframe',
   '[tabindex]',
   'audio[controls]',
   'video[controls]',
@@ -51,13 +52,28 @@ function getAllTabbingElements (parentElem) {
         isNotRadioOrTabbableRadio(node)
       )
     ) {
-      onlyTabbable.push(node)
+      if (node instanceof HTMLIFrameElement) {
+        var iframeDoc = node.contentWindow.document
+        var tabbableElementsInIframe = getAllTabbingElements(iframeDoc)
+        const handleKeyEvent = event => {
+          const blocked = tabTrappingKey(event, iframeDoc, onlyTabbable)
+          if (blocked) {
+            iframeDoc.removeEventListener('keydown', handleKeyEvent)
+          }
+        }
+        iframeDoc.addEventListener('keydown', handleKeyEvent)
+        tabbableElementsInIframe.forEach((elem) => {
+          onlyTabbable.push(elem)
+        })
+      } else {
+        onlyTabbable.push(node)
+      }
     }
   }
   return onlyTabbable
 }
 
-function tabTrappingKey (event, parentElem) {
+function tabTrappingKey (event, parentElem, onlyTabbable) {
   // check if current event keyCode is tab
   if (!event || event.key !== 'Tab') return
 
@@ -72,7 +88,7 @@ function tabTrappingKey (event, parentElem) {
     return false
   }
 
-  var allTabbingElements = getAllTabbingElements(parentElem)
+  var allTabbingElements = onlyTabbable || getAllTabbingElements(parentElem)
   var firstFocusableElement = allTabbingElements[0]
   var lastFocusableElement = allTabbingElements[allTabbingElements.length - 1]
 
